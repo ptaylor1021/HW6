@@ -1,0 +1,24 @@
+{
+    "id": "F810B994",
+    "path": "~/R/HW6/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv",
+    "project_path": "csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv",
+    "type": "text",
+    "hash": "2098679508",
+    "contents": "",
+    "dirty": false,
+    "created": 1604976218814.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "cursorPosition": "0,458",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604975932,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604975932,
+    "read_only": false,
+    "read_only_alternatives": []
+}

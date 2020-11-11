@@ -1,0 +1,32 @@
+{
+    "id": "6EB218D3",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1604987504319.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "expression": "swe_cases_tidy",
+        "caption": "swe_cases_tidy",
+        "totalObservations": "292",
+        "displayedObservations": "292",
+        "variables": "2",
+        "cacheKey": "DB9BD03B",
+        "object": "swe_cases_tidy",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=swe_cases_tidy&cache_key=DB9BD03B&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604987043,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604987504319,
+    "read_only": false,
+    "read_only_alternatives": []
+}

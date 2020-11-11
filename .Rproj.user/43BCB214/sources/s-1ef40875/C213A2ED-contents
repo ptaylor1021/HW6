@@ -1,0 +1,172 @@
+---
+title: "COVID: Sweden v. USA"
+author: "Patrick Taylor"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(readr)
+library(janitor)
+```
+
+
+
+```{r echo=FALSE, warning = FALSE}
+cases <- read.csv("csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", check.names = FALSE, header = TRUE) %>%
+  select(-"Lat", -"Long", -"Province/State") #Import data set from JHU CSEE and select for our comparisons between Sweden and US
+
+
+  #Selects relevant columns for analysis
+  
+  cases_tidy <- cases %>%
+    pivot_longer(cols=c("1/22/20":"11/8/20"), names_to = "date", values_to = "concases") %>%
+    rename("country" = `Country/Region`)
+  
+  #Pivot data to have all dates in one column/number of cases
+  
+  swe_cases_tidy <- cases_tidy %>%
+    select(date, concases, country) %>%
+  filter(country == "Sweden") %>%
+    select(-"country")
+  
+  swe_cases_tidy$date <- as.Date.character(swe_cases_tidy$date, format = "%m/%d/%y") #This puts the date info into a format that ggplot will recognize
+    
+usa_cases_tidy <- cases_tidy %>%
+    select(date, concases, country) %>%
+  filter(country == "US") %>%
+    select(-"country")
+
+
+usa_cases_tidy$date <- as.Date.character(usa_cases_tidy$date, format = "%m/%d/%y")
+
+```
+
+
+```{r pressure, echo=FALSE, warning = FALSE}
+## US Graph that finds cases per 100k
+usa_cases_tidy %>%
+  ggplot(aes(x=date, y= ((concases)*100000)/328200000)) +
+    geom_line(stat = "identity") +
+  labs(title = "US Confirmed Covid Cases per 100k", y = "Confirmed Cases per 100k", x = "Date", caption = "Source: JHU CSEE") +
+  ylim(0, 3500) + #Set these limits so they're the same as the Sweden graph
+  theme_linedraw()  
+```
+
+As the graph below shows, COVID has clearly been a large problem for the United States, with all confirmed cases now having reached roughly 3000 cases per every 100k individuals. President Trump has been criticized for his lack of response to the crisis, with critics citing a lack of formal mask mandate and encouraging falsehoods only exacerbating the crisis. President Trump's strategy was to hand control to Governors so that they could determine the best course of action. While strategies varied and states fared differently, from a nationwide view the United States has a tattered quilt-like policy that is inconsistent. Though one country is often touted for 'revealing the hoax' of COVID as they did very little. 
+
+
+``` {r, sweden, echo = FALSE, warning = FALSE}
+swe_cases_tidy %>%
+  ggplot(aes(x=date, y= ((concases)*100000)/10230000)) +
+    geom_line(stat = "identity") +
+  labs(title = "Sweden Confirmed Covid Cases per 100k", y = "Confirmed Cases per 100k", x = "Date", caption = "Source: JHU CSEE") +
+  ylim(0, 3500) +
+  theme_linedraw()
+
+```
+
+
+As this graph shows, Sweden has a Case/100k rate less than half of that of the United States, but what made that so? Many politicians such as Sen. Rand Paul has cited Sweden as a reason to remove lockdowns, and reopen the economy fully. Yet, what Sweden's plan actually was was a 'virtual lockdown'. Swedes had significantly fewer trains to ride on, fewer flights available, and stopped travelling to other countries (https://www.axios.com/sweden-coronavirus-strategy-epidemiologist-02b29922-6040-4b31-aafd-ff4ad01256be.html). Restaurants, bars, and movie theaters have remained open in Sweden and people have seemingly lead normal lives, yet more localized. Certainly, there are still many questions as to what allowed Sweden to perform better than the US in per-capita cases.
+
+
+
+
+
+``` {r percent change, echo = FALSE, warning = FALSE}
+
+swe_cases_tidy %>%
+  filter(concases > 4834) %>% #4834 chosen to find cases beginning in April when testing was more widely available
+  ggplot(aes(x=date, y = (concases/lag(concases)-1)*100)) +
+    geom_line(stat = "identity") +
+  geom_smooth()+
+  labs(title = "Sweden Daily Pct Change Covid Cases", y = "Daily Change in Covid Cases", x = "Month", caption = "Source: JHU CSEE") +
+  ylim(0, 20) +
+  theme_linedraw() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") #Makes sure each month is on the axis
+
+
+
+```
+
+In this graph on daily percent changes in confrimed cases, the first thing to note is that this data set often has repeat numbers for consecutive days, accounting for the many drops to zero. As such this smooth line gives a better idea of Sweden's trends. As you can see in the graph below, the US has had a relatively good past few months in percent change of total cases, yet if you look closely you can see the end of the tail pointing upwards. More dramatically, Sweden's tail is also pointing upward. This is a result of both countries (widely reported in the news) having more outbreaks. With that in mind, it seems both countries' lasseiz faire attitude towards COVID has resulted in a spike. As many public health officials have noted, as it gets to the colder months, people congregate in doors more and that is likely the case for both countries.
+
+
+``` {r US pct change, echo = FALSE, warning = FALSE}
+
+usa_cases_tidy %>%
+  filter(concases > 192101)  %>%  #This number chosen because it is right before April 1st
+  ggplot(aes(x=date, y = (concases/lag(concases)-1)*100)) +
+    geom_line(stat = "identity") +
+  geom_smooth() +
+  labs(title = "US Daily Pct Change Covid Cases", y = "Daily Change in Covid Cases", x = "Month", caption = "Source: JHU CSEE") +
+  ylim(0, 20) +
+  theme_linedraw() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") #Makes sure each month is on the axis
+
+
+```
+
+
+``` {r deaths, echo = FALSE, warning = FALSE}
+deaths <- read.csv("csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv", check.names = FALSE, header = TRUE) %>%
+  select(-"Lat", -"Long", -"Province/State")
+
+
+deaths_tidy <- deaths %>%
+    pivot_longer(cols=c("1/22/20":"11/8/20"), names_to = "date", values_to = "deaths") %>%
+    rename("country" = `Country/Region`)
+
+
+#DF for Swe deaths
+swe_deaths_tidy <- deaths_tidy %>%
+    select(date, deaths, country) %>%
+  filter(country == "Sweden") %>%
+    select(-"country")
+
+swe_deaths_tidy$date <- as.Date.character(swe_deaths_tidy$date, format = "%m/%d/%y")
+
+#DF for US Deaths
+
+usa_deaths_tidy <- deaths_tidy %>%
+    select(date, deaths, country) %>%
+  filter(country == "US") %>%
+    select(-"country")
+
+usa_deaths_tidy$date <- as.Date.character(usa_deaths_tidy$date, format = "%m/%d/%y")
+
+```
+
+
+``` {r US deaths, echo = FALSE, warning = FALSE}
+#Using same format for cases/100k
+usa_deaths_tidy %>%
+  ggplot(aes(x=date, y= ((deaths)*100000)/328200000)) +
+    geom_line(stat = "identity") +
+  labs(title = "US Confirmed Deaths per 100k", y = "Confirmed Deaths per 100k", x = "Months", caption = "Source: JHU CSEE") +
+  ylim(0, 80) + #Set these limits so they're the same as the Sweden graph
+  theme_linedraw() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") #Makes sure each month is on the axis
+  
+
+
+
+```
+
+With these two graphs showing deaths per 100k demonstrate is stark; as Sweden began to level out their death numbers in July, the only thing the United States did was to have a lower rate of death that stayed more consistent. That's to say deaths in the US haven't stopped, just slowed down. Though, what conclusion does this bring us to? In a time where healthcare is the most precious resource available, Americans do not have it in droves. Swedes on the other hand have a healthcare system that is free for all legal residents, universal, and everyone is automatically enrolled (https://www.commonwealthfund.org/international-health-policy-center/countries/sweden). Their coverage cover a wide range of medical services including inpatient, outpatient, and mental health. Swedes can expect to pay a yearly MAXIMUM of $375 out of pocket for drugs and outpatient services. On the other hand, 10% of Americans have NO health insurance at all and where single individuals can expect to pay nearly $4,400 out of pocket before being reimbursed. While this analysis of this COVID data does not determine why exactly Sweden is doing better per capita despite restrictions, I hoped to offer a lack of access to medical care as a reason. Americans may not be able to get free tests, or afford treatment if the hospital runs a number of tests. A general fear to go to the doctor, not because of getting a shot, because bankruptcy might loom, might motivate a lack of preventive health measures on the personal level.
+
+``` {r Swe deaths, echo = FALSE, warning = FALSE}
+
+swe_deaths_tidy %>%
+  ggplot(aes(x=date, y= ((deaths)*100000)/10230000)) +
+    geom_line(stat = "identity") +
+  labs(title = "Sweden Confirmed Deaths per 100k", y = "Confirmed Deaths per 100k", x = "Months", caption = "Source: JHU CSEE") +
+  ylim(0, 80) + 
+  theme_linedraw() +
+  scale_x_date(date_labels = "%b", date_breaks = "1 month") #Makes sure each month is on the axis
+
+
+```

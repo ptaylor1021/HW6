@@ -9,6 +9,6 @@ Required Packages:
 5. janitor (For cleaning many of the data frames up)
 
 
-Purpose: This repository allows you to have access to the JHU data to manipulate personally while also being able to view my analysis.
+Purpose: This repository allows you to have access to the JHU data (except WHO SitReps as there are tooooo many) to manipulate personally while also being able to view my analysis.
 
 Reproduce: To get a nice and tidy .html file, you can simply knit the Report.Rmd file to HTML!

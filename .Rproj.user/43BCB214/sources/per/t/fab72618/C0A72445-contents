@@ -1,0 +1,53 @@
+---
+title: "Sweden v. USA"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(lubridate)
+library(readr)
+library(janitor)
+```
+
+#Import data set from JHU CSEE and select for our comparisons between Sweden and US
+
+```{r}
+cases <- read.csv("csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv", check.names = FALSE, header = TRUE) %>%
+  select(-"Lat", -"Long", -"Province/State")
+  #Selects relevant columns for analysis
+  
+  cases_tidy <- cases %>%
+    pivot_longer(cols=c("1/22/20":"11/8/20"), names_to = "date", values_to = "concases") %>%
+    rename("country" = `Country/Region`)
+  
+  #Pivot data to have all dates in one column/number of cases
+  
+  swe_cases_tidy <- cases_tidy %>%
+    select(date, concases, country) %>%
+  filter(country == "Sweden") %>%
+    select(-"country")
+    
+usa_cases_tidy <- cases_tidy %>%
+    select(date, concases, country) %>%
+  filter(country == "US") %>%
+    select(-"country")
+
+#Had to make separate function to make the dates recognized
+  class(as.Date(as.character(usa_cases_tidy$date), "%d/%m/%y"))
+
+```
+
+
+```{r pressure, echo=FALSE}
+## Sweden Graph
+usa_cases_tidy %>%
+  ggplot(aes(x=date, y=concases)) +
+    geom_point()
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

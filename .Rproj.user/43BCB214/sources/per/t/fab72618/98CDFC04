@@ -1,0 +1,32 @@
+{
+    "id": "98CDFC04",
+    "path": null,
+    "project_path": null,
+    "type": "r_dataframe",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1604988732470.0,
+    "source_on_save": false,
+    "relative_order": 6,
+    "properties": {
+        "expression": "usa_cases_tidy",
+        "caption": "usa_cases_tidy",
+        "totalObservations": "292",
+        "displayedObservations": "292",
+        "variables": "2",
+        "cacheKey": "5DACE17E",
+        "object": "usa_cases_tidy",
+        "environment": "",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=usa_cases_tidy&cache_key=5DACE17E&max_cols=50",
+        "preview": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1604988672,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1604988732470,
+    "read_only": false,
+    "read_only_alternatives": []
+}

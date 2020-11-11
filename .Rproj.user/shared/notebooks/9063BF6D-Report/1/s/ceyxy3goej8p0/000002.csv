@@ -1,0 +1,8 @@
+"0","## US Graph that finds cases per 100k"
+"0","usa_cases_tidy %>%"
+"0","  ggplot(aes(x=date, y= ((concases)*100000)/328200000)) +"
+"0","    geom_line(stat = ""identity"") +"
+"0","  labs(title = ""US Confirmed Covid Cases per 100k"", y = ""Confirmed Cases per 100k"", x = ""Date"", caption = ""Source: JHU CSEE"") +"
+"0","  ylim(0, 3500) #Set these limits so they're the same as the Sweden graph"
+"2","Error in default + theme : non-numeric argument to binary operator
+"
